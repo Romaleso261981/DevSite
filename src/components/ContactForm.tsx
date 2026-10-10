@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Send } from "lucide-react";
+import { Mail, Phone, Send } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -68,6 +68,23 @@ export function ContactForm() {
           description="Залиште заявку — після валідної форми відкриється ваш поштовий клієнт. Онлайн-бекенд для заявок поки не підключений."
         />
 
+        <div className="mx-auto mb-8 flex max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center sm:gap-6">
+          <a
+            href={`tel:${SITE.phoneTel}`}
+            className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[var(--muted)] transition hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+          >
+            <Phone className="size-4 text-cyan-500" aria-hidden />
+            {SITE.phone}
+          </a>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[var(--muted)] transition hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+          >
+            <Mail className="size-4 text-cyan-500" aria-hidden />
+            {SITE.email}
+          </a>
+        </div>
+
         <MotionReveal>
           <div className="mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
             <form
@@ -117,7 +134,7 @@ export function ContactForm() {
                     type="tel"
                     autoComplete="tel"
                     className={inputClass(Boolean(errors.phone))}
-                    placeholder="+380..."
+                    placeholder="+380 68 947 87 23"
                     {...register("phone")}
                   />
                 </Field>

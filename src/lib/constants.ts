@@ -4,7 +4,10 @@ export const SITE = {
   description:
     "DevSite — преміальна українська агенція веброзробки. Створюємо сучасні сайти, інтернет-магазини та вебзастосунки з акцентом на дизайн, продуктивність і масштабованість.",
   email: "hello@devsite.ua",
-  phone: "+380 00 000 00 00",
+  /** Display format (international Ukrainian) */
+  phone: "+380 68 947 87 23",
+  /** E.164 for tel: links */
+  phoneTel: "+380689478723",
   url: "https://devsite.ua",
 } as const;
 

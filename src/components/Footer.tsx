@@ -50,7 +50,7 @@ export function Footer() {
             </li>
             <li>
               <a
-                href={`tel:${SITE.phone.replace(/\s/g, "")}`}
+                href={`tel:${SITE.phoneTel}`}
                 className="inline-flex items-center gap-2 transition hover:text-[var(--fg)]"
               >
                 <Phone className="size-4" aria-hidden />
