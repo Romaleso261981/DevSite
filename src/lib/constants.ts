@@ -3,7 +3,7 @@ export const SITE = {
   tagline: "Преміальна українська вебстудія",
   description:
     "DevSite — преміальна українська агенція веброзробки. Створюємо сучасні сайти, інтернет-магазини та вебзастосунки з акцентом на дизайн, продуктивність і масштабованість.",
-  email: "hello@devsite.ua",
+  email: "devsite2026@gmail.com",
   /** Display format (international Ukrainian) */
   phone: "+380 68 947 87 23",
   /** E.164 for tel: links */
