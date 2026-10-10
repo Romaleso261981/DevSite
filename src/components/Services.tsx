@@ -44,19 +44,19 @@ export function Services() {
                 <motion.article
                   whileHover={reduced ? undefined : { y: -6, scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 320, damping: 22 }}
-                  className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-[rgba(17,24,39,0.65)] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl"
+                  className="group relative h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--inset-shine)] backdrop-blur-xl"
                 >
                   <div
                     className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-blue-500/10 blur-2xl transition group-hover:bg-cyan-400/15"
                     aria-hidden
                   />
-                  <div className="mb-5 inline-flex size-11 items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-cyan-300">
+                  <div className="mb-5 inline-flex size-11 items-center justify-center rounded-xl border border-[var(--border)] bg-gradient-to-br from-blue-500/20 to-purple-500/20 text-cyan-500">
                     <Icon className="size-5" aria-hidden />
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-white">
+                  <h3 className="font-display text-xl font-semibold text-[var(--fg)]">
                     {service.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-300/90">
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
                     {service.description}
                   </p>
                 </motion.article>

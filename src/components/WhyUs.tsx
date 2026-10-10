@@ -16,14 +16,14 @@ export function WhyUs() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {WHY_US.map((item, index) => (
             <MotionReveal key={item.title} delay={index * 0.04}>
-              <li className="h-full rounded-2xl border border-white/10 bg-[rgba(17,24,39,0.55)] p-5 backdrop-blur-md">
-                <div className="mb-3 inline-flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-purple-500/20 text-cyan-300">
+              <li className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 backdrop-blur-md">
+                <div className="mb-3 inline-flex size-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/25 to-purple-500/20 text-cyan-500">
                   <Zap className="size-4" aria-hidden />
                 </div>
-                <h3 className="font-display text-lg font-semibold text-white">
+                <h3 className="font-display text-lg font-semibold text-[var(--fg)]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300/90">
+                <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
                   {item.description}
                 </p>
               </li>

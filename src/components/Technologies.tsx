@@ -21,7 +21,7 @@ export function Technologies() {
           {TECHNOLOGIES.map((tech, index) => (
             <motion.div
               key={tech.name}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[rgba(17,24,39,0.6)] px-4 py-6 text-center backdrop-blur-md"
+              className="group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] px-4 py-6 text-center backdrop-blur-md"
               initial={reduced ? false : { opacity: 0, y: 16 }}
               whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
@@ -29,7 +29,7 @@ export function Technologies() {
               whileHover={reduced ? undefined : { y: -4 }}
             >
               <motion.div
-                className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/25 via-transparent to-purple-500/25 font-display text-sm font-bold tracking-tight text-white"
+                className="mx-auto mb-3 flex size-14 items-center justify-center rounded-2xl border border-[var(--border)] bg-gradient-to-br from-blue-500/25 via-transparent to-purple-500/25 font-display text-sm font-bold tracking-tight text-[var(--fg)]"
                 animate={
                   reduced
                     ? undefined
@@ -44,7 +44,7 @@ export function Technologies() {
               >
                 {tech.short}
               </motion.div>
-              <p className="text-sm font-medium text-slate-200">{tech.name}</p>
+              <p className="text-sm font-medium text-[var(--muted)]">{tech.name}</p>
             </motion.div>
           ))}
         </div>

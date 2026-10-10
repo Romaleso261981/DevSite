@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Unbounded } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/constants";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const display = Unbounded({
   variable: "--font-display",
@@ -59,8 +60,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#080C18",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#080C18" },
+    { media: "(prefers-color-scheme: light)", color: "#F3F6FC" },
+  ],
+  colorScheme: "dark light",
   width: "device-width",
   initialScale: 1,
 };
@@ -70,8 +74,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="uk"
       className={`${display.variable} ${body.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--white)]">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)]">
         {children}
       </body>
     </html>

@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { NAV_LINKS } from "@/lib/constants";
 import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
@@ -30,7 +31,7 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background,border,backdrop-filter] duration-300 ${
         scrolled || open
-          ? "border-b border-white/10 bg-[rgba(8,12,24,0.72)] backdrop-blur-xl"
+          ? "border-b border-[var(--border)] bg-[var(--header-bg)] backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -45,7 +46,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-[var(--muted)] transition-colors hover:bg-[var(--glass)] hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
             >
               {link.label}
             </a>
@@ -53,6 +54,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className="hidden sm:inline-flex" />
           <a
             href="#contact"
             className="hidden rounded-xl bg-[linear-gradient(135deg,#2563EB,#7C3AED)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_rgba(37,99,235,0.35)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 sm:inline-flex"
@@ -62,7 +64,7 @@ export function Header() {
 
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 lg:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--glass)] text-[var(--fg)] transition hover:bg-[var(--glass-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Закрити меню" : "Відкрити меню"}
@@ -81,7 +83,7 @@ export function Header() {
             animate={reduced ? undefined : { opacity: 1, height: "auto" }}
             exit={reduced ? undefined : { opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="border-t border-white/10 bg-[rgba(8,12,24,0.96)] backdrop-blur-xl lg:hidden"
+            className="border-t border-[var(--border)] bg-[var(--header-solid)] backdrop-blur-xl lg:hidden"
           >
             <nav
               className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 sm:px-6"
@@ -91,12 +93,15 @@ export function Header() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="rounded-xl px-3 py-3 text-base font-medium text-slate-200 hover:bg-white/5"
+                  className="rounded-xl px-3 py-3 text-base font-medium text-[var(--muted)] hover:bg-[var(--glass)] hover:text-[var(--fg)]"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
+              <div className="mt-2 sm:hidden">
+                <ThemeToggle compact={false} />
+              </div>
               <a
                 href="#contact"
                 className="mt-2 rounded-xl bg-[linear-gradient(135deg,#2563EB,#7C3AED)] px-4 py-3 text-center text-sm font-semibold text-white"

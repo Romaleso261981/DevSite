@@ -17,7 +17,7 @@ function FloatingWindow({
 }) {
   return (
     <motion.div
-      className={`pointer-events-none absolute hidden overflow-hidden rounded-2xl border border-white/15 bg-[rgba(17,24,39,0.72)] shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl md:block ${className}`}
+      className={`pointer-events-none absolute hidden overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--card-strong)] shadow-[var(--shadow)] backdrop-blur-xl md:block ${className}`}
       animate={
         reduced
           ? undefined
@@ -30,17 +30,17 @@ function FloatingWindow({
       }
       aria-hidden
     >
-      <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
+      <div className="flex items-center gap-1.5 border-b border-[var(--border)] px-3 py-2">
         <span className="size-2 rounded-full bg-rose-400/80" />
         <span className="size-2 rounded-full bg-amber-400/80" />
         <span className="size-2 rounded-full bg-emerald-400/80" />
-        <span className="ml-2 text-[10px] tracking-wide text-slate-400">
+        <span className="ml-2 text-[10px] tracking-wide text-[var(--subtle)]">
           {title}
         </span>
       </div>
       <div className="space-y-2 p-3">
         <div className="h-2 w-3/4 rounded bg-gradient-to-r from-blue-500/50 to-cyan-400/30" />
-        <div className="h-2 w-1/2 rounded bg-white/10" />
+        <div className="h-2 w-1/2 rounded bg-[var(--glass-hover)]" />
         <div className="grid grid-cols-3 gap-2 pt-1">
           <div className="h-10 rounded-lg bg-purple-500/20" />
           <div className="h-10 rounded-lg bg-blue-500/20" />
@@ -60,7 +60,7 @@ export function Hero() {
       className="relative isolate overflow-hidden pt-28 pb-20 sm:pt-32 sm:pb-28 lg:pt-36 lg:pb-32"
     >
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(37,99,235,0.28),_transparent_55%),radial-gradient(ellipse_at_80%_20%,_rgba(124,58,237,0.22),_transparent_40%),radial-gradient(ellipse_at_20%_80%,_rgba(6,182,212,0.16),_transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--hero-glow-a),_transparent_55%),radial-gradient(ellipse_at_80%_20%,_var(--hero-glow-b),_transparent_40%),radial-gradient(ellipse_at_20%_80%,_var(--hero-glow-c),_transparent_45%)]" />
         <div className="geo-grid absolute inset-0 opacity-40" />
         <motion.div
           className="absolute -left-24 top-24 size-72 rounded-full bg-blue-600/25 blur-3xl"
@@ -81,7 +81,7 @@ export function Hero() {
           }
         />
         <div className="absolute left-1/2 top-1/3 h-px w-[120%] -translate-x-1/2 rotate-12 bg-gradient-to-r from-transparent via-cyan-400/25 to-transparent" />
-        <div className="absolute left-1/3 top-1/4 size-40 rotate-45 border border-white/5" />
+        <div className="absolute left-1/3 top-1/4 size-40 rotate-45 border border-[var(--border)]" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -104,16 +104,16 @@ export function Hero() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl"
         >
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium tracking-wide text-cyan-200/90 backdrop-blur-md">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--glass)] px-3 py-1.5 text-xs font-medium tracking-wide text-[var(--accent-soft)] backdrop-blur-md">
             <Sparkles className="size-3.5" aria-hidden />
             DevSite · преміальна вебстудія
           </p>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--white)] sm:text-5xl md:text-6xl lg:text-[4.1rem]">
+          <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--fg)] sm:text-5xl md:text-6xl lg:text-[4.1rem]">
             Створюємо цифрові рішення, які розвивають ваш бізнес
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
             Сучасні сайти, інтернет-магазини та вебзастосунки з сильним
             дизайном, чистою інженерією й увагою до деталей — щоб ваш продукт
             виглядав і працював на рівні преміум.
@@ -129,7 +129,7 @@ export function Hero() {
             </a>
             <a
               href="#portfolio"
-              className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              className="inline-flex items-center justify-center rounded-xl border border-[var(--border-strong)] bg-[var(--glass)] px-6 py-3.5 text-sm font-semibold text-[var(--fg)] backdrop-blur-md transition hover:bg-[var(--glass-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
             >
               Переглянути роботи
             </a>

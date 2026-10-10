@@ -23,8 +23,8 @@ export function Logo({ className = "", priority = false }: LogoProps) {
         aria-hidden
       />
       <span className="font-display text-[1.15rem] font-semibold leading-none tracking-tight sm:text-[1.2rem]">
-        <span className="text-[var(--white)]">Dev</span>
-        <span className="bg-gradient-to-r from-cyan-300 to-[#2563EB] bg-clip-text text-transparent">
+        <span className="text-[var(--fg)]">Dev</span>
+        <span className="bg-gradient-to-r from-cyan-500 to-[#2563EB] bg-clip-text text-transparent">
           Site
         </span>
       </span>

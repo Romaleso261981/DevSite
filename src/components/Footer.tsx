@@ -6,18 +6,18 @@ export function Footer() {
   const year = 2026;
 
   return (
-    <footer className="relative border-t border-white/10 bg-[rgba(8,12,24,0.95)]">
+    <footer className="relative border-t border-[var(--border)] bg-[var(--footer-bg)]">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
         <div>
           <Logo />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-[var(--subtle)]">
             {SITE.tagline}. Створюємо сучасні цифрові продукти з акцентом на
             дизайн, продуктивність і чисту інженерію.
           </p>
         </div>
 
         <div>
-          <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
             Навігація
           </h2>
           <ul className="mt-4 space-y-2">
@@ -25,7 +25,7 @@ export function Footer() {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+                  className="text-sm text-[var(--subtle)] transition hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
                 >
                   {link.label}
                 </a>
@@ -35,14 +35,14 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
             Контакти
           </h2>
-          <ul className="mt-4 space-y-3 text-sm text-slate-400">
+          <ul className="mt-4 space-y-3 text-sm text-[var(--subtle)]">
             <li>
               <a
                 href={`mailto:${SITE.email}`}
-                className="inline-flex items-center gap-2 transition hover:text-white"
+                className="inline-flex items-center gap-2 transition hover:text-[var(--fg)]"
               >
                 <Mail className="size-4" aria-hidden />
                 {SITE.email}
@@ -51,7 +51,7 @@ export function Footer() {
             <li>
               <a
                 href={`tel:${SITE.phone.replace(/\s/g, "")}`}
-                className="inline-flex items-center gap-2 transition hover:text-white"
+                className="inline-flex items-center gap-2 transition hover:text-[var(--fg)]"
               >
                 <Phone className="size-4" aria-hidden />
                 {SITE.phone}
@@ -63,26 +63,26 @@ export function Footer() {
             <a
               href="#"
               aria-label="Соцмережа (плейсхолдер)"
-              className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              className="inline-flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--glass)] text-[var(--muted)] transition hover:bg-[var(--glass-hover)] hover:text-[var(--fg)]"
             >
               <Share2 className="size-4" />
             </a>
             <a
               href="#"
               aria-label="Вебпрофіль (плейсхолдер)"
-              className="inline-flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              className="inline-flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--glass)] text-[var(--muted)] transition hover:bg-[var(--glass-hover)] hover:text-[var(--fg)]"
             >
               <Globe className="size-4" />
             </a>
           </div>
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-3 text-xs text-[var(--faint)]">
             Соцмережі — плейсхолдери до появи офіційних профілів.
           </p>
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+      <div className="border-t border-[var(--border)]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-[var(--faint)] sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
             © {year} {SITE.name}. Усі права захищено.
           </p>

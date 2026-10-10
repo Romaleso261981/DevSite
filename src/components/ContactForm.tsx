@@ -69,7 +69,7 @@ export function ContactForm() {
         />
 
         <MotionReveal>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-white/10 bg-[rgba(17,24,39,0.72)] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+          <div className="mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-5"
@@ -171,7 +171,7 @@ export function ContactForm() {
               {mode === "mailto" ? (
                 <p
                   role="status"
-                  className="rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-3 text-sm text-cyan-100"
+                  className="rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-3 text-sm text-[var(--accent-soft)]"
                 >
                   Форма валідна. Відкриваємо ваш email-клієнт для відправки на{" "}
                   {SITE.email}. Якщо лист не відкрився — скопіюйте адресу й
@@ -182,7 +182,7 @@ export function ContactForm() {
               {mode === "soon" ? (
                 <p
                   role="status"
-                  className="rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-100"
+                  className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm text-[var(--fg)]"
                 >
                   Онлайн-відправка заявок ще в розробці. Напишіть нам на{" "}
                   <a
@@ -194,7 +194,7 @@ export function ContactForm() {
                   .
                 </p>
               ) : (
-                <p className="flex items-start gap-2 text-xs text-slate-400">
+                <p className="flex items-start gap-2 text-xs text-[var(--subtle)]">
                   <Mail className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                   Без бекенду: після перевірки полів використовуємо mailto, а не
                   фейковий «успіх».
@@ -221,12 +221,12 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-medium text-slate-200">
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-[var(--muted)]">
         {label}
       </label>
       {children}
       {error ? (
-        <p className="mt-1.5 text-xs text-rose-300" role="alert">
+        <p className="mt-1.5 text-xs text-rose-500" role="alert">
           {error}
         </p>
       ) : null}
@@ -235,9 +235,9 @@ function Field({
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full rounded-xl border bg-[rgba(8,12,24,0.65)] px-3.5 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:ring-2 focus:ring-cyan-400/50 ${
+  return `w-full rounded-xl border bg-[var(--input)] px-3.5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--faint)] outline-none transition focus:ring-2 focus:ring-cyan-400/50 ${
     hasError
       ? "border-rose-400/50 focus:border-rose-300"
-      : "border-white/10 focus:border-cyan-400/40"
+      : "border-[var(--border)] focus:border-cyan-400/40"
   }`;
 }

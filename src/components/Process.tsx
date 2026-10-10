@@ -26,19 +26,19 @@ export function Process() {
           {PROCESS_STEPS.map((item, index) => (
             <motion.li
               key={item.step}
-              className="relative rounded-2xl border border-white/10 bg-[rgba(17,24,39,0.65)] p-6 backdrop-blur-xl"
+              className="relative rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 backdrop-blur-xl"
               initial={reduced ? false : { opacity: 0, x: index % 2 === 0 ? -18 : 18 }}
               whileInView={reduced ? undefined : { opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: index * 0.06 }}
             >
-              <span className="font-display text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+              <span className="font-display text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-400">
                 {item.step}
               </span>
-              <h3 className="mt-3 font-display text-xl font-semibold text-white">
+              <h3 className="mt-3 font-display text-xl font-semibold text-[var(--fg)]">
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-300/90">
+              <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
                 {item.description}
               </p>
             </motion.li>
