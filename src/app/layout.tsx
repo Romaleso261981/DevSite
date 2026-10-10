@@ -98,7 +98,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)]">
+      <body className="min-h-full flex flex-col bg-bg text-[var(--fg)]">
         {children}
       </body>
     </html>
