@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Phone, Send } from "lucide-react";
+import { ChevronDown, Mail, Phone, Send } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -144,21 +144,32 @@ export function ContactForm() {
                   label="Тип проєкту"
                   error={errors.projectType?.message}
                 >
-                  <select
-                    id="projectType"
-                    className={inputClass(Boolean(errors.projectType))}
-                    defaultValue=""
-                    {...register("projectType")}
-                  >
-                    <option value="" disabled>
-                      Оберіть варіант
-                    </option>
-                    {PROJECT_TYPES.map((type) => (
-                      <option key={type} value={type} className="bg-[var(--secondary)]">
-                        {type}
+                  <div className="relative">
+                    <select
+                      id="projectType"
+                      required
+                      className={`${inputClass(Boolean(errors.projectType))} appearance-none pr-10 text-[var(--fg)] invalid:text-[var(--faint)]`}
+                      defaultValue=""
+                      {...register("projectType")}
+                    >
+                      <option value="" disabled>
+                        Оберіть варіант
                       </option>
-                    ))}
-                  </select>
+                      {PROJECT_TYPES.map((type) => (
+                        <option
+                          key={type}
+                          value={type}
+                          className="bg-[var(--secondary)] text-[var(--fg)]"
+                        >
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      className="pointer-events-none absolute right-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--faint)]"
+                      aria-hidden
+                    />
+                  </div>
                 </Field>
               </div>
 
@@ -170,7 +181,7 @@ export function ContactForm() {
                 <textarea
                   id="message"
                   rows={5}
-                  className={`${inputClass(Boolean(errors.message))} resize-y`}
+                  className={`${inputClass(Boolean(errors.message))} h-auto min-h-[8.5rem] py-3 resize-y`}
                   placeholder="Коротко про задачу, терміни та очікування"
                   {...register("message")}
                 />
@@ -252,7 +263,7 @@ function Field({
 }
 
 function inputClass(hasError: boolean) {
-  return `w-full rounded-xl border bg-[var(--input)] px-3.5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--faint)] outline-none transition focus:ring-2 focus:ring-cyan-400/50 ${
+  return `box-border h-11 w-full rounded-xl border bg-[var(--input)] px-3.5 text-sm leading-normal text-[var(--fg)] placeholder:text-[var(--faint)] outline-none transition focus:ring-2 focus:ring-cyan-400/50 ${
     hasError
       ? "border-rose-400/50 focus:border-rose-300"
       : "border-[var(--border)] focus:border-cyan-400/40"
