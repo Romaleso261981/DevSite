@@ -91,6 +91,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script
+          id="cookieyes"
+          type="text/javascript"
+          src="https://cdn-cookieyes.com/client_data/7777fa9371544648b05cc59f/script.js"
+        />
+        <script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         />
