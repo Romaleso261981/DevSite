@@ -69,7 +69,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const GA_MEASUREMENT_ID = "G-XBFB7M0GY3";
+const GA_MEASUREMENT_ID = "G-ZX5S1SX5TX";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -93,11 +93,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           id="cookieyes"
           type="text/javascript"
-          defer
+          async
           src="https://cdn-cookieyes.com/client_data/7777fa9371544648b05cc59f/script.js"
         />
         <script
-          defer
+          async
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         />
         <script
