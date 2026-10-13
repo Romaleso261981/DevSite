@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Unbounded } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { SITE } from "@/lib/constants";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -91,13 +90,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        <Script
+        <script
           id="cookieyes"
+          type="text/javascript"
+          defer
           src="https://cdn-cookieyes.com/client_data/7777fa9371544648b05cc59f/script.js"
-          strategy="beforeInteractive"
         />
         <script
-          async
+          defer
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         />
         <script
