@@ -2,11 +2,10 @@ export const GA_MEASUREMENT_ID = "G-ZX5S1SX5TX";
 export const GOOGLE_ADS_ID = "AW-18512379903";
 
 /**
- * Label from Google Ads → Goals → Conversions → the website lead action → Tag setup.
- * It is the part after the slash in `AW-18512379903/AbCdEfGhIjKlMnOp`.
- * Leave empty until that label exists. Do not invent one.
+ * Event snippet for «Надсилання форми devsite».
+ * Google Ads: gtag('event', 'conversion', {'send_to': 'AW-18512379903/aAM8CKLSvJwdEP__sftE'});
  */
-export const GOOGLE_ADS_CONVERSION_LABEL = "";
+export const GOOGLE_ADS_CONVERSION_LABEL = "aAM8CKLSvJwdEP__sftE";
 
 const LEAD_DEDUPE_MS = 2000;
 let lastLeadAt = 0;
