@@ -96,7 +96,7 @@ async function readBody(request: Request): Promise<unknown> {
     phone: textField(form.get("phone")),
     projectType: textField(form.get("projectType")),
     message: textField(form.get("message")),
-    company: textField(form.get("company")),
+    hp_leave_blank: textField(form.get("hp_leave_blank")),
   };
 }
 
@@ -131,7 +131,7 @@ function sameOrigin(request: Request): boolean {
 }
 
 function isHoneypotFilled(body: unknown): boolean {
-  if (!body || typeof body !== "object" || !("company" in body)) return false;
-  const value = body.company;
+  if (!body || typeof body !== "object" || !("hp_leave_blank" in body)) return false;
+  const value = body.hp_leave_blank;
   return typeof value === "string" && value.trim().length > 0;
 }

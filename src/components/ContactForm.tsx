@@ -40,10 +40,10 @@ export function ContactForm() {
   ) => {
     setMode("idle");
     setErrorMessage("");
-    const form = event?.target;
-    const company =
+    const form = event?.currentTarget ?? event?.target;
+    const honeypot =
       form instanceof HTMLFormElement
-        ? String(new FormData(form).get("company") ?? "")
+        ? String(new FormData(form).get("hp_leave_blank") ?? "")
         : "";
 
     try {
@@ -52,7 +52,7 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          company,
+          hp_leave_blank: honeypot,
         }),
       });
       const payload = (await response.json().catch(() => null)) as {
@@ -118,13 +118,12 @@ export function ContactForm() {
               }}
             >
               <div className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden" aria-hidden="true">
-                <label htmlFor="company">Company</label>
                 <input
-                  id="company"
-                  name="company"
+                  name="hp_leave_blank"
                   type="text"
                   tabIndex={-1}
                   autoComplete="off"
+                  readOnly
                   defaultValue=""
                 />
               </div>
