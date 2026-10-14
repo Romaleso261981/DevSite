@@ -1,6 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Unbounded } from "next/font/google";
 import "./globals.css";
+import {
+  GA_MEASUREMENT_ID,
+  GOOGLE_CONSENT_BOOTSTRAP,
+  GOOGLE_TAG_CONFIG,
+} from "@/lib/analytics";
 import { SITE } from "@/lib/constants";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
@@ -72,8 +77,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const GA_MEASUREMENT_ID = "G-ZX5S1SX5TX";
-
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -94,6 +97,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script
+          dangerouslySetInnerHTML={{ __html: GOOGLE_CONSENT_BOOTSTRAP }}
+        />
+        <script
           id="cookieyes"
           type="text/javascript"
           async
@@ -104,14 +110,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         />
         <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}');
-            `,
-          }}
+          dangerouslySetInnerHTML={{ __html: GOOGLE_TAG_CONFIG }}
         />
         <script
           dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}

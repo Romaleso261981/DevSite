@@ -6,6 +6,7 @@ import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { SectionHeading } from "@/components/SectionHeading";
 import { MotionReveal } from "@/components/MotionReveal";
+import { trackGenerateLead } from "@/lib/analytics";
 import { PROJECT_TYPES, SITE } from "@/lib/constants";
 import {
   contactSchema,
@@ -54,6 +55,7 @@ export function ContactForm() {
       setMode("soon");
       return;
     }
+    trackGenerateLead();
     setMode("mailto");
     reset();
   };
