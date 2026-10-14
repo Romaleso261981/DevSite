@@ -60,7 +60,7 @@ function hasConsent(category: ConsentCategory): boolean {
   }
 }
 
-/** Call only after a validated lead was actually handed to the mail client. */
+/** Call only after the server confirms the lead was delivered. */
 export function trackGenerateLead(): void {
   if (typeof window.gtag !== "function") return;
 

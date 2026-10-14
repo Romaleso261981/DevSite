@@ -1,8 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, Mail, Phone, Send } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { ChevronDown, Loader2, Mail, Phone, Send } from "lucide-react";
+import { useState, type BaseSyntheticEvent, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { SectionHeading } from "@/components/SectionHeading";
 import { MotionReveal } from "@/components/MotionReveal";
@@ -13,10 +13,11 @@ import {
   type ContactFormValues,
 } from "@/lib/contact-schema";
 
-type SubmitMode = "idle" | "mailto" | "soon";
+type SubmitMode = "idle" | "success" | "error";
 
 export function ContactForm() {
   const [mode, setMode] = useState<SubmitMode>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -33,31 +34,51 @@ export function ContactForm() {
     },
   });
 
-  const onSubmit = (data: ContactFormValues) => {
-    const subject = encodeURIComponent(
-      `Заявка з DevSite: ${data.projectType}`,
-    );
-    const body = encodeURIComponent(
-      [
-        `Ім’я: ${data.name}`,
-        `Email: ${data.email}`,
-        `Телефон: ${data.phone}`,
-        `Тип проєкту: ${data.projectType}`,
-        "",
-        data.message,
-      ].join("\n"),
-    );
+  const onSubmit = async (
+    data: ContactFormValues,
+    event?: BaseSyntheticEvent,
+  ) => {
+    setMode("idle");
+    setErrorMessage("");
+    const form = event?.target;
+    const company =
+      form instanceof HTMLFormElement
+        ? String(new FormData(form).get("company") ?? "")
+        : "";
 
-    const mailto = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          company,
+        }),
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        delivered?: boolean;
+        duplicate?: boolean;
+        error?: string;
+      } | null;
 
-    const opened = window.open(mailto, "_self");
-    if (opened === null) {
-      setMode("soon");
-      return;
+      if (!response.ok || !payload?.delivered) {
+        setMode("error");
+        setErrorMessage(
+          payload?.error ||
+            "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть нам на пошту.",
+        );
+        return;
+      }
+
+      if (!payload.duplicate) trackGenerateLead();
+      setMode("success");
+      reset();
+    } catch {
+      setMode("error");
+      setErrorMessage(
+        "Не вдалося надіслати заявку. Перевірте з’єднання і спробуйте ще раз.",
+      );
     }
-    trackGenerateLead();
-    setMode("mailto");
-    reset();
   };
 
   return (
@@ -67,7 +88,7 @@ export function ContactForm() {
         <SectionHeading
           eyebrow="Контакти"
           title="Обговоримо ваш проєкт"
-          description="Залиште заявку — після валідної форми відкриється ваш поштовий клієнт. Онлайн-бекенд для заявок поки не підключений."
+          description="Залиште заявку — ми отримаємо її автоматично і скоро з вами зв’яжемося."
         />
 
         <div className="mx-auto mb-8 flex max-w-2xl flex-col gap-3 sm:flex-row sm:justify-center sm:gap-6">
@@ -88,12 +109,23 @@ export function ContactForm() {
         </div>
 
         <MotionReveal>
-          <div className="mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
+          <div className="relative mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-5"
               noValidate
             >
+              <div className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden" aria-hidden="true">
+                <label htmlFor="company">Company</label>
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  defaultValue=""
+                />
+              </div>
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field
                   id="name"
@@ -192,44 +224,34 @@ export function ContactForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
+                aria-busy={isSubmitting}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#2563EB,#7C3AED)] px-5 py-3.5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(37,99,235,0.35)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-                <Send className="size-4" aria-hidden />
-                Надіслати заявку
+                {isSubmitting ? (
+                  <Loader2 className="size-4 animate-spin" aria-hidden />
+                ) : (
+                  <Send className="size-4" aria-hidden />
+                )}
+                {isSubmitting ? "Надсилаємо…" : "Надіслати заявку"}
               </button>
 
-              {mode === "mailto" ? (
+              {mode === "success" ? (
                 <p
                   role="status"
                   className="rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-3 text-sm text-[var(--accent-soft)]"
                 >
-                  Форма валідна. Відкриваємо ваш email-клієнт для відправки на{" "}
-                  {SITE.email}. Якщо лист не відкрився — скопіюйте адресу й
-                  напишіть вручну.
+                  Дякуємо! Вашу заявку успішно надіслано. Ми скоро з вами зв’яжемося.
                 </p>
               ) : null}
 
-              {mode === "soon" ? (
+              {mode === "error" ? (
                 <p
-                  role="status"
-                  className="rounded-xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm text-[var(--fg)]"
+                  role="alert"
+                  className="rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-[var(--fg)]"
                 >
-                  Онлайн-відправка заявок ще в розробці. Напишіть нам на{" "}
-                  <a
-                    className="underline underline-offset-2"
-                    href={`mailto:${SITE.email}`}
-                  >
-                    {SITE.email}
-                  </a>
-                  .
+                  {errorMessage}
                 </p>
-              ) : (
-                <p className="flex items-start gap-2 text-xs text-[var(--subtle)]">
-                  <Mail className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-                  Без бекенду: після перевірки полів використовуємо mailto, а не
-                  фейковий «успіх».
-                </p>
-              )}
+              ) : null}
             </form>
           </div>
         </MotionReveal>
