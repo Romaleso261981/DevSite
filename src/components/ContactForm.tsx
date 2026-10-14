@@ -99,21 +99,23 @@ export function ContactForm() {
             <Phone className="size-4 text-cyan-500" aria-hidden />
             {SITE.phone}
           </a>
-          <a
-            href={`mailto:${SITE.email}`}
-            className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[var(--muted)] transition hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
-          >
+          <span className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[var(--muted)]">
             <Mail className="size-4 text-cyan-500" aria-hidden />
             {SITE.email}
-          </a>
+          </span>
         </div>
 
         <MotionReveal>
           <div className="relative mx-auto max-w-2xl rounded-3xl border border-[var(--border)] bg-[var(--card-strong)] p-6 shadow-[var(--shadow)] backdrop-blur-xl sm:p-8">
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              method="post"
+              action="/api/contact"
               className="space-y-5"
               noValidate
+              onSubmit={(event) => {
+                event.preventDefault();
+                void handleSubmit(onSubmit)(event);
+              }}
             >
               <div className="pointer-events-none absolute top-0 left-0 h-0 w-0 overflow-hidden" aria-hidden="true">
                 <label htmlFor="company">Company</label>
@@ -130,7 +132,7 @@ export function ContactForm() {
                 <Field
                   id="name"
                   label="Ім’я"
-                  error={errors.name?.message}
+                  error={fieldMessage(errors.name?.message)}
                 >
                   <input
                     id="name"
@@ -144,7 +146,7 @@ export function ContactForm() {
                 <Field
                   id="email"
                   label="Email"
-                  error={errors.email?.message}
+                  error={fieldMessage(errors.email?.message)}
                 >
                   <input
                     id="email"
@@ -161,7 +163,7 @@ export function ContactForm() {
                 <Field
                   id="phone"
                   label="Телефон"
-                  error={errors.phone?.message}
+                  error={fieldMessage(errors.phone?.message)}
                 >
                   <input
                     id="phone"
@@ -176,7 +178,7 @@ export function ContactForm() {
                 <Field
                   id="projectType"
                   label="Тип проєкту"
-                  error={errors.projectType?.message}
+                  error={fieldMessage(errors.projectType?.message)}
                 >
                   <div className="relative">
                     <select
@@ -210,7 +212,7 @@ export function ContactForm() {
               <Field
                 id="message"
                 label="Повідомлення"
-                error={errors.message?.message}
+                error={fieldMessage(errors.message?.message)}
               >
                 <textarea
                   id="message"
@@ -258,6 +260,10 @@ export function ContactForm() {
       </div>
     </section>
   );
+}
+
+function fieldMessage(message: unknown): string | undefined {
+  return typeof message === "string" ? message : undefined;
 }
 
 function Field({

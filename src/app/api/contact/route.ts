@@ -12,69 +12,58 @@ const MAX_BODY_BYTES = 16_000;
 
 export async function POST(request: Request) {
   if (!sameOrigin(request)) {
-    return Response.json(
-      { ok: false, error: "Запит відхилено." },
-      { status: 403 },
-    );
-  }
-
-  let raw: string;
-  try {
-    raw = await request.text();
-  } catch {
-    return Response.json(
-      { ok: false, error: "Не вдалося прочитати заявку." },
-      { status: 400 },
-    );
-  }
-
-  if (raw.length > MAX_BODY_BYTES) {
-    return Response.json(
-      { ok: false, error: "Заявка занадто велика." },
-      { status: 413 },
-    );
+    return respond(request, 403, { ok: false, error: "Запит відхилено." });
   }
 
   let body: unknown;
   try {
-    body = JSON.parse(raw);
-  } catch {
-    return Response.json(
-      { ok: false, error: "Некоректний запит." },
-      { status: 400 },
+    body = await readBody(request);
+  } catch (error) {
+    const tooLarge = error instanceof Error && error.message === "too-large";
+    return respond(
+      request,
+      tooLarge ? 413 : 400,
+      {
+        ok: false,
+        error: tooLarge ? "Заявка занадто велика." : "Некоректний запит.",
+      },
     );
   }
 
   if (isHoneypotFilled(body)) {
-    return Response.json({ ok: true, delivered: false });
+    return respond(request, 200, { ok: true, delivered: false });
   }
 
   const parsed = contactSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json(
-      { ok: false, error: "Перевірте заповнення форми." },
-      { status: 400 },
-    );
+    return respond(request, 400, {
+      ok: false,
+      error: "Перевірте заповнення форми.",
+    });
   }
 
   const ip = clientAddress(request);
   if (!allowAttempt(ip)) {
-    return Response.json(
-      { ok: false, error: "Забагато спроб. Спробуйте трохи пізніше." },
-      { status: 429 },
-    );
+    return respond(request, 429, {
+      ok: false,
+      error: "Забагато спроб. Спробуйте трохи пізніше.",
+    });
   }
 
   const key = leadFingerprint(parsed.data);
   const claim = claimLead(key);
   if (claim === "duplicate") {
-    return Response.json({ ok: true, delivered: true, duplicate: true });
+    return respond(request, 200, {
+      ok: true,
+      delivered: true,
+      duplicate: true,
+    });
   }
   if (claim === "busy") {
-    return Response.json(
-      { ok: false, error: "Заявка вже надсилається." },
-      { status: 409 },
-    );
+    return respond(request, 409, {
+      ok: false,
+      error: "Заявка вже надсилається.",
+    });
   }
 
   const channels = await deliverLead(parsed.data, new Date());
@@ -82,17 +71,51 @@ export async function POST(request: Request) {
   settleLead(key, delivered);
 
   if (!delivered) {
-    return Response.json(
-      {
-        ok: false,
-        error:
-          "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть нам на пошту, вказану на сторінці.",
-      },
-      { status: 502 },
-    );
+    return respond(request, 502, {
+      ok: false,
+      error:
+        "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть нам на пошту, вказану на сторінці.",
+    });
   }
 
-  return Response.json({ ok: true, delivered: true });
+  return respond(request, 200, { ok: true, delivered: true });
+}
+
+async function readBody(request: Request): Promise<unknown> {
+  const type = request.headers.get("content-type") ?? "";
+  if (type.includes("application/json")) {
+    const raw = await request.text();
+    if (raw.length > MAX_BODY_BYTES) throw new Error("too-large");
+    return JSON.parse(raw) as unknown;
+  }
+
+  const form = await request.formData();
+  return {
+    name: textField(form.get("name")),
+    email: textField(form.get("email")),
+    phone: textField(form.get("phone")),
+    projectType: textField(form.get("projectType")),
+    message: textField(form.get("message")),
+    company: textField(form.get("company")),
+  };
+}
+
+function textField(value: FormDataEntryValue | null): string {
+  return typeof value === "string" ? value : "";
+}
+
+function respond(
+  request: Request,
+  status: number,
+  body: Record<string, unknown>,
+) {
+  if (request.headers.get("sec-fetch-mode") === "navigate") {
+    const url = new URL("/", request.url);
+    url.searchParams.set("lead", body.delivered === true ? "sent" : "error");
+    url.hash = "contact";
+    return Response.redirect(url, 303);
+  }
+  return Response.json(body, { status });
 }
 
 function sameOrigin(request: Request): boolean {

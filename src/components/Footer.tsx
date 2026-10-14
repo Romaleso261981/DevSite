@@ -40,13 +40,10 @@ export function Footer() {
           </h2>
           <ul className="mt-4 space-y-3 text-sm text-[var(--subtle)]">
             <li>
-              <a
-                href={`mailto:${SITE.email}`}
-                className="inline-flex items-center gap-2 transition hover:text-[var(--fg)]"
-              >
+              <span className="inline-flex items-center gap-2">
                 <Mail className="size-4" aria-hidden />
                 {SITE.email}
-              </a>
+              </span>
             </li>
             <li>
               <a
