@@ -9,11 +9,13 @@ function FloatingWindow({
   title,
   delay,
   reduced,
+  imageSrc,
 }: {
   className: string;
   title: string;
   delay: number;
   reduced: boolean;
+  imageSrc?: string;
 }) {
   return (
     <motion.div
@@ -30,23 +32,31 @@ function FloatingWindow({
       }
       aria-hidden
     >
-      <div className="flex items-center gap-1.5 border-b border-[var(--border)] px-3 py-2">
+      <div className="flex items-center gap-1.5 border-b border-[var(--border)] bg-[var(--card-strong)] px-3 py-2">
         <span className="size-2 rounded-full bg-rose-400/80" />
         <span className="size-2 rounded-full bg-amber-400/80" />
         <span className="size-2 rounded-full bg-emerald-400/80" />
-        <span className="ml-2 text-[10px] tracking-wide text-[var(--subtle)]">
+        <span className="ml-2 truncate text-[10px] tracking-wide text-[var(--subtle)]">
           {title}
         </span>
       </div>
-      <div className="space-y-2 p-3">
-        <div className="h-2 w-3/4 rounded bg-gradient-to-r from-blue-500/50 to-cyan-400/30" />
-        <div className="h-2 w-1/2 rounded bg-[var(--glass-hover)]" />
-        <div className="grid grid-cols-3 gap-2 pt-1">
-          <div className="h-10 rounded-lg bg-purple-500/20" />
-          <div className="h-10 rounded-lg bg-blue-500/20" />
-          <div className="h-10 rounded-lg bg-cyan-500/15" />
+      {imageSrc ? (
+        <img
+          src={imageSrc}
+          alt=""
+          className="h-24 w-full object-cover object-top"
+        />
+      ) : (
+        <div className="space-y-2 p-3">
+          <div className="h-2 w-3/4 rounded bg-gradient-to-r from-blue-500/50 to-cyan-400/30" />
+          <div className="h-2 w-1/2 rounded bg-[var(--glass-hover)]" />
+          <div className="grid grid-cols-3 gap-2 pt-1">
+            <div className="h-10 rounded-lg bg-purple-500/20" />
+            <div className="h-10 rounded-lg bg-blue-500/20" />
+            <div className="h-10 rounded-lg bg-cyan-500/15" />
+          </div>
         </div>
-      </div>
+      )}
     </motion.div>
   );
 }
@@ -86,16 +96,18 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <FloatingWindow
-          className="right-0 top-8 w-56 lg:w-64"
-          title="app.devsite"
+          className="right-0 top-8 w-48 lg:w-56"
+          title="devsite.com.ua"
           delay={0}
           reduced={reduced}
+          imageSrc="/hero/preview-home.png"
         />
         <FloatingWindow
           className="bottom-8 right-28 w-48 lg:right-40 lg:w-56"
-          title="checkout.preview"
+          title="techno-ai.vercel.app"
           delay={1.2}
           reduced={reduced}
+          imageSrc="/hero/preview-services.png"
         />
 
         <motion.div

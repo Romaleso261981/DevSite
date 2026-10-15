@@ -1,4 +1,3 @@
-import { ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { MotionReveal } from "@/components/MotionReveal";
 import { PORTFOLIO } from "@/lib/constants";
@@ -11,39 +10,19 @@ export function Portfolio() {
         <SectionHeading
           eyebrow="Портфоліо"
           title="Наші проєкти"
-          description="Нижче — демонстраційні концепти, що показують підхід до дизайну та розробки. Це не кейси реальних клієнтів."
+          description="Два приклади сайтів для різних задач: ресторан морепродуктів і сервіс кондиціонування."
         />
 
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-2">
           {PORTFOLIO.map((project, index) => (
             <MotionReveal key={project.id} delay={index * 0.06}>
               <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card-strong)] backdrop-blur-xl">
-                <div
-                  className="relative aspect-[16/10] overflow-hidden border-b border-[var(--border)]"
-                  aria-hidden
-                >
-                  <div
-                    className={`absolute inset-0 ${
-                      index === 0
-                        ? "bg-[linear-gradient(145deg,#2563EB55,#06B6D433,var(--secondary))]"
-                        : index === 1
-                          ? "bg-[linear-gradient(145deg,#7C3AED55,#2563EB33,var(--secondary))]"
-                          : "bg-[linear-gradient(145deg,#06B6D455,#7C3AED33,var(--secondary))]"
-                    }`}
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-[var(--border)]">
+                  <img
+                    src={project.image}
+                    alt=""
+                    className="h-full w-full object-cover object-top"
                   />
-                  <div className="absolute inset-0 geo-grid opacity-30" />
-                  <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-[var(--border-strong)] bg-[var(--browser-chrome)] p-3 backdrop-blur-md">
-                    <div className="mb-2 flex gap-1">
-                      <span className="size-1.5 rounded-full bg-[var(--subtle)]" />
-                      <span className="size-1.5 rounded-full bg-[var(--subtle)]" />
-                      <span className="size-1.5 rounded-full bg-[var(--subtle)]" />
-                    </div>
-                    <div className="h-1.5 w-2/3 rounded bg-[var(--glass-hover)]" />
-                    <div className="mt-2 h-1.5 w-1/3 rounded bg-[var(--glass)]" />
-                  </div>
-                  <span className="absolute right-3 top-3 rounded-md border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent-soft)]">
-                    Demo
-                  </span>
                 </div>
 
                 <div className="flex flex-1 flex-col p-5">
@@ -66,10 +45,6 @@ export function Portfolio() {
                       </span>
                     ))}
                   </div>
-                  <p className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-blue-500">
-                    Демонстраційний макет
-                    <ArrowUpRight className="size-3.5 opacity-70" aria-hidden />
-                  </p>
                 </div>
               </article>
             </MotionReveal>

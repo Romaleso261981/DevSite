@@ -105,28 +105,22 @@ export const TECHNOLOGIES = [
 
 export const PORTFOLIO = [
   {
-    id: "demo-commerce",
-    title: "Demo Commerce",
-    type: "Демо-проєкт · інтернет-магазин",
+    id: "sellingfish",
+    title: "Selling Fish",
+    type: "Ресторан",
     description:
-      "Концепт магазину з каталогом, фільтрами та акцентом на швидкий checkout.",
-    tags: ["Next.js", "UI/UX", "E-commerce"],
+      "Сайт ресторану морепродуктів: головний екран, бронювання столика, галерея та відгуки гостей.",
+    tags: ["Сайт", "Бронювання", "Галерея"],
+    image: "/portfolio/sellingfish.png",
   },
   {
-    id: "demo-saas",
-    title: "Demo SaaS Board",
-    type: "Демо-проєкт · вебзастосунок",
+    id: "acfixer",
+    title: "AC Fixer",
+    type: "Сервіс кондиціонування",
     description:
-      "Макет аналітичного кабінету з дашбордом, таблицями та темною візуальною мовою.",
-    tags: ["React", "TypeScript", "Dashboard"],
-  },
-  {
-    id: "demo-brand",
-    title: "Demo Brand Site",
-    type: "Демо-проєкт · корпоративний сайт",
-    description:
-      "Преміальний бренд-сайт з акцентом на типографіку, анімацію та storytelling.",
-    tags: ["Landing", "Motion", "SEO"],
+      "Лендінг сервісу з ремонту та встановлення кондиціонерів: послуги, команда, галерея і форма заявки.",
+    tags: ["Лендінг", "Послуги", "Заявка"],
+    image: "/portfolio/acfixer.png",
   },
 ] as const;
 
