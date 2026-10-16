@@ -7,8 +7,7 @@ export const GOOGLE_ADS_ID = "AW-18512379903";
  */
 export const GOOGLE_ADS_CONVERSION_LABEL = "aAM8CKLSvJwdEP__sftE";
 
-const LEAD_DEDUPE_MS = 2000;
-let lastLeadAt = 0;
+const firedLeadIds = new Set<string>();
 
 type ConsentCategory = "analytics" | "advertisement";
 
@@ -60,18 +59,34 @@ function hasConsent(category: ConsentCategory): boolean {
   }
 }
 
-/** Call only after the server confirms the lead was delivered. */
-export function trackGenerateLead(): void {
+function syncGoogleConsent(
+  analyticsAllowed: boolean,
+  adsAllowed: boolean,
+): void {
+  window.gtag?.("consent", "update", {
+    analytics_storage: analyticsAllowed ? "granted" : "denied",
+    ad_storage: adsAllowed ? "granted" : "denied",
+    ad_user_data: adsAllowed ? "granted" : "denied",
+    ad_personalization: adsAllowed ? "granted" : "denied",
+  });
+}
+
+/**
+ * Call only after the server confirms the lead was delivered.
+ * `leadId` must be unique per submission so a rerender or a repeated
+ * response cannot emit a second generate_lead or Ads conversion.
+ */
+export function trackGenerateLead(leadId: string): void {
+  if (!leadId || firedLeadIds.has(leadId)) return;
   if (typeof window.gtag !== "function") return;
 
   const analyticsAllowed = hasConsent("analytics");
   const adsAllowed =
     hasConsent("advertisement") && GOOGLE_ADS_CONVERSION_LABEL.length > 0;
+  firedLeadIds.add(leadId);
   if (!analyticsAllowed && !adsAllowed) return;
 
-  const now = Date.now();
-  if (now - lastLeadAt < LEAD_DEDUPE_MS) return;
-  lastLeadAt = now;
+  syncGoogleConsent(analyticsAllowed, adsAllowed);
 
   if (analyticsAllowed) {
     window.gtag("event", "generate_lead", {

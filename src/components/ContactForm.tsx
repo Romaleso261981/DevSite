@@ -1,8 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, Loader2, Mail, Phone, Send } from "lucide-react";
-import { useState, type BaseSyntheticEvent, type ReactNode } from "react";
+import { ChevronDown, Loader2, Mail, Phone, Send, X } from "lucide-react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type BaseSyntheticEvent,
+  type ReactNode,
+} from "react";
 import { useForm } from "react-hook-form";
 import { SectionHeading } from "@/components/SectionHeading";
 import { MotionReveal } from "@/components/MotionReveal";
@@ -18,6 +24,7 @@ type SubmitMode = "idle" | "success" | "error";
 export function ContactForm() {
   const [mode, setMode] = useState<SubmitMode>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const closeSuccess = useCallback(() => setMode("idle"), []);
   const {
     register,
     handleSubmit,
@@ -40,6 +47,7 @@ export function ContactForm() {
   ) => {
     setMode("idle");
     setErrorMessage("");
+    const leadId = crypto.randomUUID();
     const form = event?.currentTarget ?? event?.target;
     const honeypot =
       form instanceof HTMLFormElement
@@ -70,7 +78,7 @@ export function ContactForm() {
         return;
       }
 
-      if (!payload.duplicate) trackGenerateLead();
+      if (!payload.duplicate) trackGenerateLead(leadId);
       setMode("success");
       reset();
     } catch {
@@ -236,15 +244,6 @@ export function ContactForm() {
                 {isSubmitting ? "Надсилаємо…" : "Надіслати заявку"}
               </button>
 
-              {mode === "success" ? (
-                <p
-                  role="status"
-                  className="rounded-xl border border-cyan-400/25 bg-cyan-400/10 px-4 py-3 text-sm text-[var(--accent-soft)]"
-                >
-                  Дякуємо! Вашу заявку успішно надіслано. Ми скоро з вами зв’яжемося.
-                </p>
-              ) : null}
-
               {mode === "error" ? (
                 <p
                   role="alert"
@@ -257,7 +256,42 @@ export function ContactForm() {
           </div>
         </MotionReveal>
       </div>
+      {mode === "success" ? (
+        <SuccessNotice onClose={closeSuccess} />
+      ) : null}
     </section>
+  );
+}
+
+function SuccessNotice({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const timer = window.setTimeout(onClose, 6000);
+    return () => window.clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div
+        role="status"
+        className="pointer-events-auto relative w-full max-w-sm rounded-2xl border border-cyan-400/30 bg-[var(--card-strong)] px-5 py-4 text-[var(--fg)] shadow-[var(--shadow)] backdrop-blur-xl"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 rounded-lg p-1 text-[var(--subtle)] transition hover:bg-[var(--glass-hover)] hover:text-[var(--fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+          aria-label="Закрити"
+        >
+          <X className="size-4" aria-hidden />
+        </button>
+        <p className="font-display pr-6 text-lg font-semibold">Дякуємо!</p>
+        <p className="mt-1 text-sm leading-relaxed text-[var(--muted)]">
+          Вашу заявку успішно отримано.
+        </p>
+        <p className="text-sm leading-relaxed text-[var(--muted)]">
+          Ми скоро з вами зв’яжемося.
+        </p>
+      </div>
+    </div>
   );
 }
 
