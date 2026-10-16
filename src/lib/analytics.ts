@@ -72,7 +72,7 @@ function syncGoogleConsent(
 }
 
 /**
- * Call only after the server confirms the lead was delivered.
+ * Call only after the server confirms Telegram accepted the lead.
  * `leadId` must be unique per submission so a rerender or a repeated
  * response cannot emit a second generate_lead or Ads conversion.
  */

@@ -1,5 +1,5 @@
 import { contactSchema } from "@/lib/contact-schema";
-import { deliverLead } from "@/lib/lead-delivery";
+import { sendLeadTelegram } from "@/lib/lead-delivery";
 import {
   allowAttempt,
   claimLead,
@@ -66,8 +66,7 @@ export async function POST(request: Request) {
     });
   }
 
-  const channels = await deliverLead(parsed.data, new Date());
-  const delivered = channels.email || channels.telegram;
+  const delivered = await sendLeadTelegram(parsed.data, new Date());
   settleLead(key, delivered);
 
   if (!delivered) {
