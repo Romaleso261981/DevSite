@@ -103,7 +103,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           id="cookieyes"
           type="text/javascript"
           async
-          src="https://cdn-cookieyes.com/client_data/7777fa9371544648b05cc59f/script.js"
+          src="https://cdn-cookieyes.com/client_data/9ff8579aebabe76e9463abc2116b805a/script.js"
         />
         <script
           async
