@@ -10,7 +10,7 @@ export function Portfolio() {
         <SectionHeading
           eyebrow="Портфоліо"
           title="Наші проєкти"
-          description="Два приклади сайтів для різних задач: ресторан морепродуктів і сервіс кондиціонування."
+          description="Три приклади сайтів для різних задач: ресторан морепродуктів, сервіс кондиціонування і вебстудія."
         />
 
         <div className="grid gap-5 lg:grid-cols-2">

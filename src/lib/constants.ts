@@ -122,6 +122,15 @@ export const PORTFOLIO = [
     tags: ["Лендінг", "Послуги", "Заявка"],
     image: "/portfolio/acfixer.png",
   },
+  {
+    id: "webmisto",
+    title: "WebMisto",
+    type: "Вебстудія",
+    description:
+      "Сайт студії зі Львова: розробка сайтів, інтернет-магазинів і навчальних платформ, ціни та заявка.",
+    tags: ["Сайт", "Магазин", "Платформа"],
+    image: "/portfolio/webmisto.png",
+  },
 ] as const;
 
 export const PROCESS_STEPS = [
