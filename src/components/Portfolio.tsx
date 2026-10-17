@@ -1,8 +1,63 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
-import { MotionReveal } from "@/components/MotionReveal";
 import { PORTFOLIO } from "@/lib/constants";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
+
+function pagesFor(perView: number) {
+  return Math.max(1, PORTFOLIO.length - perView + 1);
+}
 
 export function Portfolio() {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const [perView, setPerView] = useState(2);
+  const reduced = usePrefersReducedMotion();
+  const pageCount = pagesFor(perView);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 640px)");
+    const update = () => setPerView(media.matches ? 2 : 1);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    scrollerRef.current?.scrollTo({ left: 0, behavior: "auto" });
+    setPage(0);
+  }, [perView]);
+
+  const syncPage = useCallback(() => {
+    const el = scrollerRef.current;
+    const card = el?.querySelector<HTMLElement>("[data-portfolio-card]");
+    if (!el || !card) return;
+    const gap = Number.parseFloat(getComputedStyle(el).columnGap) || 0;
+    const step = card.offsetWidth + gap;
+    if (step <= 0) return;
+    const next = Math.round(el.scrollLeft / step);
+    setPage(Math.max(0, Math.min(next, pagesFor(perView) - 1)));
+  }, [perView]);
+
+  const scrollToPage = useCallback(
+    (index: number) => {
+      const el = scrollerRef.current;
+      const card = el?.querySelector<HTMLElement>("[data-portfolio-card]");
+      if (!el || !card) return;
+      const gap = Number.parseFloat(getComputedStyle(el).columnGap) || 0;
+      const step = card.offsetWidth + gap;
+      const next = Math.max(0, Math.min(index, pagesFor(perView) - 1));
+      el.scrollTo({
+        left: next * step,
+        behavior: reduced ? "auto" : "smooth",
+      });
+      setPage(next);
+    },
+    [perView, reduced],
+  );
+
   return (
     <section id="portfolio" className="relative py-20 sm:py-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_rgba(124,58,237,0.12),_transparent_60%)]" />
@@ -13,11 +68,31 @@ export function Portfolio() {
           description="Три приклади сайтів для різних задач: ресторан морепродуктів, сервіс кондиціонування і вебстудія."
         />
 
-        <div className="grid gap-5 lg:grid-cols-2">
-          {PORTFOLIO.map((project, index) => (
-            <MotionReveal key={project.id} delay={index * 0.06}>
-              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card-strong)] backdrop-blur-xl">
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-[var(--border)]">
+        <div className="relative">
+          <div
+            ref={scrollerRef}
+            onScroll={syncPage}
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            tabIndex={0}
+            aria-label="Галерея прикладів робіт"
+            onKeyDown={(event) => {
+              if (event.key === "ArrowRight") {
+                event.preventDefault();
+                scrollToPage(page + 1);
+              }
+              if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                scrollToPage(page - 1);
+              }
+            }}
+          >
+            {PORTFOLIO.map((project) => (
+              <article
+                key={project.id}
+                data-portfolio-card
+                className="flex w-full shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card-strong)] backdrop-blur-xl sm:w-[calc((100%-1.25rem)/2)]"
+              >
+                <div className="relative aspect-video overflow-hidden border-b border-[var(--border)]">
                   <img
                     src={project.image}
                     alt=""
@@ -47,8 +122,46 @@ export function Portfolio() {
                   </div>
                 </div>
               </article>
-            </MotionReveal>
-          ))}
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="absolute left-3 top-[22%] z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] text-[var(--fg)] shadow-[var(--shadow)] backdrop-blur-xl transition hover:bg-[var(--glass-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 disabled:pointer-events-none disabled:opacity-35"
+            aria-label="Попередні роботи"
+            disabled={page === 0}
+            onClick={() => scrollToPage(page - 1)}
+          >
+            <ChevronLeft className="size-5" />
+          </button>
+          <button
+            type="button"
+            className="absolute right-3 top-[22%] z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-strong)] text-[var(--fg)] shadow-[var(--shadow)] backdrop-blur-xl transition hover:bg-[var(--glass-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 disabled:pointer-events-none disabled:opacity-35"
+            aria-label="Наступні роботи"
+            disabled={page >= pageCount - 1}
+            onClick={() => scrollToPage(page + 1)}
+          >
+            <ChevronRight className="size-5" />
+          </button>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-2" role="tablist" aria-label="Сторінки галереї">
+          {Array.from({ length: pageCount }, (_, index) => {
+            const active = index === page;
+            return (
+              <button
+                key={index}
+                type="button"
+                role="tab"
+                aria-label={`Показати роботи, сторінка ${index + 1}`}
+                aria-selected={active}
+                className={`h-2 rounded-full transition-[width,background-color] ${
+                  active ? "w-6 bg-[var(--primary)]" : "w-2 bg-[var(--faint)] hover:bg-[var(--subtle)]"
+                }`}
+                onClick={() => scrollToPage(index)}
+              />
+            );
+          })}
         </div>
       </div>
     </section>
